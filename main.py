@@ -28,22 +28,11 @@ def open_contact(contact_books):
         print(f"{i}. {book}")
     option = input("Enter the number of the contact book you want to open: ")
     selected_book = find_contact_book(contact_books, option)
-    if (selected_book):
-        filename = selected_book
-        fieldnames = ['Name', 'Email', 'Phone']
-        create_csv_file(filename, fieldnames)
-        
-        contacts = []
-        while True:
-            name = input("Enter name: ")
-            email = input("Enter email: ")
-            phone = input("Enter phone: ")
-            new_contact = {'Name': name, 'Email': email, 'Phone': phone}
-            contacts = update_list(contacts, new_contact)
-            print("Updated contacts list:", contacts)
-            more = input("Do you want to add another contact? (yes/no): ")
-            if more.lower() != 'yes':
-                break
+    if selected_book:
+        with open(selected_book, 'r') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                print(row)
     else:
         print("Contact book not found.")
 
@@ -63,6 +52,7 @@ def main():
             print(f"Contact book '{filename}' created.")
         elif choice == '2':
             open_contact(contact_books)
+            return open_contact
         elif choice == '3':
             break
         else:
